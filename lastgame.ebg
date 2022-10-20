@@ -1,0 +1,37 @@
+# last game
+WHITE:
+  PAWNS: A3 C3 E3 G3 B2 D2 F2 H2 A1 C1 E1 G1 
+  KINGS: 
+BLACK:
+  PAWNS: B8 D8 F8 H8 A7 C7 E7 G7 B6 D6 F6 H6 
+  KINGS: 
+SIDE: WHITE
+MOVES-LIST:
+  1. c3b4    f6g5   
+  2. g3h4    g7f6   
+  3. b4a5    g5f4   
+  4. e3g5:f4 h6f4:g5
+  5. d2e3    f4d2:e3
+  6. c1e3:d2 b6c5   
+  7. e3f4    h8g7   
+  8. f2g3    g7h6   
+  9. f4g5    h6f4:g5
+ 10. g3g7:f6:f4 f8h6:g7
+ 11. h2g3    h6g5   
+ 12. h4f6:g5 e7g5:f6
+ 13. g3h4    g5f4   
+ 14. g1h2    d8e7   
+ 15. b2c3    e7f6   
+ 16. e1f2    d6e5   
+ 17. c3b4    e5d4   
+ 18. b4d6:c5 c7e5:d6
+ 19. a3b4    f4e3   
+ 20. f2g3    e3d2   
+ 21. g3f4    e5g3:f4
+ 22. h2f4:g3 d2c1   
+ 23. f4e5    c1a3   
+ 24. e5c3:d4 a3c5:b4
+ 25. a1b2    c5a3   
+ 26. c3d4    a3c1:b2
+ 27. d4c5    c1a3   
+ 28. a5b6    a3f8:c5

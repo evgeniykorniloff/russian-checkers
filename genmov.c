@@ -18,7 +18,7 @@ unsigned char history[2*64*64],king_history[2*64*64];
 #define L_SHIFT (16-1)
 int dir[4] = {R_SHIFT,L_SHIFT,-L_SHIFT,-R_SHIFT};
 int startSq,startPiece;
-unsigned long capMask;
+unsigned int capMask;
 Move *list;
 
 
@@ -448,11 +448,11 @@ void RemovePiece(int p, int sq, int c)
 }
 
 
-unsigned long capKingMask[MAX_GAME+MAX_PLY+1];
+unsigned int capKingMask[MAX_GAME+MAX_PLY+1];
 
 void MakeMove(Move *m)
 {
-   unsigned long w,mv,capKing,b;
+   unsigned int w,mv,capKing,b;
    int p,sq;
 
    w = m->capMask;
@@ -477,7 +477,7 @@ void MakeMove(Move *m)
 
 void UnMakeMove(Move *m)
 {
-   unsigned long w,mv,capKing,b;
+   unsigned int w,mv,capKing,b;
    int p,sq;
 
    w = m->capMask;
@@ -521,7 +521,7 @@ void Swap(int i1, int i2)
 }
 
 
-int IsLegalNotCapMove(unsigned long mv){
+int IsLegalNotCapMove(unsigned int mv){
   int from = FROM(mv), to = TO(mv);
 
   if( mv && pos[from]==PIECE(mv) && color[from]==side &&
@@ -557,7 +557,7 @@ void SortCap(int low, int high){
        Move *m = tree + low;
        int *p = sortVal + low;
        int *stop = sortVal + high;
-       unsigned long temp;
+       unsigned int temp;
        int val;
 
        for(; p <= stop; p++, m++){
@@ -581,7 +581,7 @@ void SortNotCap(int low, int high){
        Move *m = tree + low;
        int *p = sortVal + low;
        int *stop = sortVal + high;
-       unsigned long mv;
+       unsigned int mv;
        int val;
        int promY = side==BLACK?6:1;
 
@@ -606,7 +606,7 @@ void SortNotCap(int low, int high){
 
 Move *NextMove(PhaseInfo *p)
 {
-// unsigned long mv;
+// unsigned int mv;
 
   if(ply==0) goto ply0;
 

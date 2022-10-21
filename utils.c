@@ -5,12 +5,12 @@
 #define M2__  0x3333333333333333ULL
 
 
-unsigned long BitCnt(const BitBoard b)
+unsigned int BitCnt(const BitBoard b)
 {
-    unsigned long n;
+    unsigned int n;
     const BitBoard a = b - ((b >> 1) & M1__);
     const BitBoard c = (a & M2__) + ((a >> 2) & M2__);
-    n = ((unsigned long) c) + ((unsigned long) (c >> 32));
+    n = ((unsigned int) c) + ((unsigned int) (c >> 32));
     n = (n & 0x0F0F0F0F) + ((n >> 4) & 0x0F0F0F0F);
     n = (n & 0xFFFF) + (n >> 16);
     n = (n & 0xFF) + (n >> 8);
@@ -55,7 +55,7 @@ Move *StrToMove(char *s)
 {
 
   const char *DEL = " :\n";
-  unsigned long capMask = 0;
+  unsigned int capMask = 0;
   int from,to,capSq,j,len;
   Move *m;
   char *StrTok(char *str, const char *del);
@@ -159,9 +159,9 @@ void SavePosition(FILE *f){
 //-----------------------------
 void SavePositionAsEpd(FILE *f){
   int j;
-   
+
    fprintf(f,"position ");
-  
+
    for(j = 0; j < 64; j++)
    {
       if(j%8==0)
@@ -173,25 +173,25 @@ void SavePositionAsEpd(FILE *f){
            if(pos[j]==PAWN)
              fprintf(f,"P");
             else
-             fprintf(f,"K"); 
+             fprintf(f,"K");
         }break;
         case BLACK:{
            if(pos[j]==PAWN)
              fprintf(f,"p");
             else
-             fprintf(f,"k"); 
+             fprintf(f,"k");
         }break;
         default:
           fprintf(f,"1");
       }//switch
    }
-   
+
    if(side==WHITE)
      fprintf(f," w");
    else
      fprintf(f," b");
-     
-     
+
+
    fprintf(f,"\n");
 }
 
@@ -396,7 +396,7 @@ void MoveList(void)
     fprintf(stdout,"# ");
     for(m=tree; m < tree+treeCnt[1]; m++)
       fprintf(stdout,"%s; ", MoveToStr(*m));
-    fprintf(stdout,"\n");  
+    fprintf(stdout,"\n");
 //    fflush(stdout);
 }
 

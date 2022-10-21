@@ -13,7 +13,8 @@
   run:
     echoboard.exe
 
-   
+  compiler:
+    gcc 32bit mode (64 not tested)   
 ------------------------------------------------   
 
                  *** FILES ***

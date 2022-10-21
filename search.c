@@ -238,6 +238,18 @@ int Search(int alpha, int beta, int depth, Line pv_line)
          alpha = tmp;
          best = *m;
          killer[ply] = *m;
+         if((NEW_PIECE(m->mv)==KING)&&(PIECE(m->mv)!=KING)){
+            void inc_hist(unsigned char *hist,int side, Move *m, unsigned inc);
+            int j;
+            for(j=ply-2;j>0;j-=2){
+              int inc = 1+rand()&1;
+              ////
+              //printf("#---->\n")      ;
+              inc_hist(king_history,side,&game_list[game_cnt+ply-j],1);
+              inc_hist(history,side,&game_list[game_cnt+ply-j],inc);
+            }
+         }
+
          if(m->capMask==0){
             unsigned char *h = &history[(side<<12) | (m->mv&((63<<6)|63))];
             unsigned i = 1 + (rand()&1);
@@ -298,6 +310,18 @@ int Search(int alpha, int beta, int depth, Line pv_line)
 
    return alpha;
 }
+/////////////
+void inc_hist(unsigned char hist[],int side, Move *m, unsigned inc){
+
+ unsigned char *h =
+   &hist[(side<<12) | (m->mv&((63<<6)|63))];
+ if(  (unsigned)*h + inc < 255  )
+    *h += (unsigned char)inc;
+ else *h = 255;
+
+}
+
+
 
 int max(int a, int b) { return a > b ? a : b; }
 int min(int a,int b) { return a < b ? a : b; }

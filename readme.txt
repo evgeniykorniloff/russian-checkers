@@ -14,7 +14,8 @@
     echoboard.exe
 
   compiler:
-    gcc 32bit mode (64 not tested)   
+    gcc 32bit mode (64 not tested)
+    gcc *.c -O3 -o rcheckers.exe  
 ------------------------------------------------   
 
                  *** FILES ***
@@ -44,7 +45,8 @@ echoboard.exe    -   simple graph. shell,        WINDOWS
  
    mail:           evgeniy-korniloff@yandex.ru
                    
-                 
+----------------
+Enjoy!!!                
 
 
 

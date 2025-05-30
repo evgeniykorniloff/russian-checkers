@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1288612270 source:e:\src\prob\checkers10\bitbrd.c
+	"checkers.h"
+
+1288612270 e:\src\prob\checkers10\checkers.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+
+1288612270 source:e:\src\prob\checkers10\checkers.c
+	<stdio.h>
+	<stdlib.h>
+
+1288612270 source:e:\src\prob\checkers10\genmov.c
+	"checkers.h"
+
+1288612270 source:e:\src\prob\checkers10\hash.c
+	"checkers.h"
+
+1288612270 source:e:\src\prob\checkers10\main.c
+	"checkers.h"
+
+1288612270 source:e:\src\prob\checkers10\score.c
+	"checkers.h"
+
+1288612270 source:e:\src\prob\checkers10\timecont.c
+	"checkers.h"
+
+1288612270 source:e:\src\prob\checkers10\utils.c
+	<ctype.h>
+	"checkers.h"
+
+1458841851 source:e:\src\prob\checkers10\search.c
+	"checkers.h"
+

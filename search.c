@@ -9,7 +9,7 @@ extern U64 cntNodes;
 extern int Evaluate(int alpha, int beta);
 extern void TimerReset(void);
 extern int TimeUp(void);
-extern unsigned char history[2*64*64],king_history[2*64*64];
+extern unsigned char history[2*64*64];
 extern int sortVal[MAX_PLY*100];
 extern void GenPromote(void);
 extern void SortCap(int low, int high);
@@ -93,7 +93,7 @@ int Search(int alpha, int beta, int depth, Line pv_line)
   Move *m,best,last;
   int extend = 0, tmp,cnt = 0;
   Line tmp_line;
-
+  int GSR = (rand() % 10)+1; //00010
    //0x001
    white_mtl_search_path[ply] = mtl[WHITE] - mtl[BLACK];
 
@@ -125,10 +125,10 @@ int Search(int alpha, int beta, int depth, Line pv_line)
      {
        int M = mtl[WHITE] - mtl[BLACK];
        if(xside==WHITE){
-           if(M > white_mtl_search_path[ply-2])
+           if(M >= white_mtl_search_path[ply-5])
              extend++;
        }else{
-           if(M < white_mtl_search_path[ply-2])
+           if(M <= white_mtl_search_path[ply-5])
              extend++;
        }
      }
@@ -218,15 +218,20 @@ int Search(int alpha, int beta, int depth, Line pv_line)
       side=1^side; xside=1^xside; ply++;
 
 
-      //0001
-      if(cnt==1)
+      //00010
+      if(cnt==1 || depth<=2 || cnt<GSR || m->capMask || ply<=2)
         tmp = -Search(-beta,-alpha,nextDepth,tmp_line);
       else{
-        tmp = -Search(-(alpha+1),-alpha,nextDepth,tmp_line);
-        if(tmp>alpha && tmp<beta){
+        tmp = -Search(-(alpha+1),-alpha,nextDepth-1,tmp_line);
+       // if(tmp>alpha){
+       //   tmp_line[ply+1].mv = 0;
+       //   tmp = -Search(-(alpha+1),-alpha,nextDepth-1,tmp_line);
+       // }
+        if(tmp>alpha){
           tmp_line[ply+1].mv = 0;
           tmp = -Search(-beta,-alpha,nextDepth,tmp_line);
         }
+        
       }
 
 
@@ -238,28 +243,12 @@ int Search(int alpha, int beta, int depth, Line pv_line)
          alpha = tmp;
          best = *m;
          killer[ply] = *m;
-         if((NEW_PIECE(m->mv)==KING)&&(PIECE(m->mv)!=KING)){
-            void inc_hist(unsigned char *hist,int side, Move *m, unsigned inc);
-            int j;
-            for(j=ply-2;j>0;j-=2){
-              int inc = 1+rand()&1;
-              ////
-              //printf("#---->\n")      ;
-              inc_hist(king_history,side,&game_list[game_cnt+ply-j],1);
-              inc_hist(history,side,&game_list[game_cnt+ply-j],inc);
-            }
-         }
-
-         if(m->capMask==0){
+         if(m->capMask==0){ //00011
+            int D = (rand()%depth)+1;
+            //int D = (rand()%3)+1 + (tmp>100) + (tmp>300);
             unsigned char *h = &history[(side<<12) | (m->mv&((63<<6)|63))];
-            unsigned i = 1 + (rand()&1);
-            if((NEW_PIECE(m->mv)==KING)){
-              i += 3 + rand()%3;
-              if(king_history[(side<<12) | (m->mv&((63<<6)|63))]<255)
-                king_history[(side<<12) | (m->mv&((63<<6)|63))]++;
-            }
-            if(i + (unsigned)(*h) <= 255)
-              (*h) += (unsigned char)i;
+            if((int)(*h) + D <= 255)
+              (*h) += (unsigned char)D;
             else *h = 255;
          }
          if(ply==0){
@@ -310,18 +299,6 @@ int Search(int alpha, int beta, int depth, Line pv_line)
 
    return alpha;
 }
-/////////////
-void inc_hist(unsigned char hist[],int side, Move *m, unsigned inc){
-
- unsigned char *h =
-   &hist[(side<<12) | (m->mv&((63<<6)|63))];
- if(  (unsigned)*h + inc < 255  )
-    *h += (unsigned char)inc;
- else *h = 255;
-
-}
-
-
 
 int max(int a, int b) { return a > b ? a : b; }
 int min(int a,int b) { return a < b ? a : b; }
@@ -420,29 +397,28 @@ int main_search(int alpha, int beta, int depth, Line pv_line)
 
       side=1^side; xside=1^xside; ply++;
 
-    //0001
-      if(nextDepth <= 4) //8
+    //00010
+      if(depth <= 2) //8
       {
           tmp_line[ply+1].mv = 0;
           tmp = -Search(-beta,-alpha,nextDepth,tmp_line);
       }else{
          //int nd;
-         tmp = alpha+1;
-         //nd = nextDepth-2;
-         tmp_line[ply+1].mv = 0;
-         tmp = -Search(-beta,-alpha,nextDepth-2,tmp_line);
-
-         if(tmp > alpha)
-         {
-             tmp_line[ply+1].mv = 0;
-             tmp = -Search(-beta,-alpha,nextDepth-1,tmp_line);
-         }
-         if(tmp > alpha)
+         //tmp = alpha+1;
+         //nd = max(0, nextDepth-2);
+        //if(cnt==1){
+            tmp_line[ply+1].mv = 0;
+            tmp = -Search(-beta,-alpha,nextDepth-1,tmp_line);
+       // }else{
+       //     tmp_line[ply+1].mv = 0;
+       //     tmp = -Search(-(alpha+1),-alpha,nextDepth,tmp_line);
+       // }
+         //if((tmp > alpha && cnt==1) || (tmp<= alpha && cnt>1))
+         if(tmp>alpha) //??!!
          {
              tmp_line[ply+1].mv = 0;
              tmp = -main_search(-beta,-alpha,nextDepth,tmp_line);
          }
-
       }
       side=1^side; xside=1^xside; ply--;
       UnMakeMove(m);
@@ -453,9 +429,11 @@ int main_search(int alpha, int beta, int depth, Line pv_line)
          best = *m;
          killer[ply] = *m;
          if(m->capMask==0){
+            int D = (rand()%depth)+1;//0x00011
+            //int D = (rand()%3)+1 + (tmp>100) + (tmp>300);
             unsigned char *h = &history[(side<<12) | (m->mv&((63<<6)|63))];
-            if((int)(*h) + 1 <= 255)
-              (*h) += (unsigned char)1;
+            if((int)(*h) + D <= 255)
+              (*h) += (unsigned char)D;
             else *h = 255;
          }
          if(ply==0){
@@ -566,18 +544,10 @@ Move* SearchMove(void){
 
    glScore = glFindOne = __repCnt = 0;
    TimerReset();
+   memset(history,0,sizeof(history));
    HashReset();
-   srand(time(0));
-   do{
-     int j;
-     for(j=0;j<2*64*64;j++)
-       if(king_history[j]>0)
-        history[j] = (unsigned char)(rand()%((int)king_history[j]));
-       else
-        history[j] = 0;
-   }while(0);
-   //memset(history,0,sizeof(history));
 
+   srand(time(0));
    GenCap();
    if(treeCnt[1] > treeCnt[0]){
       //SortCap(0,treeCnt[1]-1);
@@ -620,7 +590,7 @@ do{
 
      //0001
      a = -INFINITY+100;
-     b = INFINITY-100;
+     b = INFINITY+100;
 
 
      tmp =  main_search(a,b,s_depth,line);
@@ -634,6 +604,13 @@ do{
        tmp =  main_search(a,INFINITY,s_depth,line);
 
      }
+     /*
+     {
+       int j;
+       for(j=0;j<treeCnt[1])
+        printf("$%d,
+     }
+     */
      if(isTimeOver) break;
    }
 

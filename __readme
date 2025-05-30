@@ -1,0 +1,97 @@
+--------------------
+release ../4
+
+!!!bug   main_search  hash_insert --> depth=1  (old depth=depth)
+
+попробовал:
+  
+      if(nextDepth <= 0) //<-----  0 вместо 8 !?
+      {
+          tmp_line[ply+1].mv = 0;
+          tmp = -Search(-beta,-alpha,nextDepth,tmp_line);
+      }else{
+         int nd;
+         tmp = alpha+1;
+         for(nd = max(0, nextDepth-2); 
+             nd <= nextDepth-1  &&  tmp > alpha;
+             nd++)
+            {
+              tmp_line[ply+1].mv = 0;
+              tmp = -Search(-beta,-alpha,nd,tmp_line);
+            } 
+         if(tmp > alpha)
+         {
+             tmp_line[ply+1].mv = 0;
+             tmp = -main_search(-beta,-alpha,nextDepth,tmp_line);
+         }    
+      }
+
+
+
+work
+
+-------------------------------
+release ../3
+
+добавил print_pos
+исправил save [file], load [file]
+!!! move order:
+   1.  killer  -- for IID
+   2.  hash 
+
+hash cut:
+  main_search - disable
+  search - if(score >= beta  ||  score <= alpha)
+  
+static cut:
+  main_search - disable
+  search  - depth==1
+  
+extensiens:
+  pawn_rank_7  
+  
+files:
+
+  rcheckers     - linux
+  rcheckers.exe - windows  
+
+------------------------------------------------
+release ../2
+
+work
+
+new echoboard.exe
+
+searchmove()
+
+  ....
+
+  a = -INF+100
+  b = INF-100 
+
+
+
+новый алгоритм поиска:
+if(nextDepth <= 5)
+      {
+          tmp_line[ply+1].mv = 0;
+          tmp = -Search(-beta,-alpha,nextDepth,tmp_line);
+      }else{
+         int nd;
+         tmp = alpha+1;
+         for(nd = nextDepth-2; 
+             nd <= nextDepth-1  &&  tmp > alpha;
+             nd++)
+            {
+              tmp_line[ply+1].mv = 0;
+              tmp = -Search(-beta,-alpha,nd,tmp_line);
+            } 
+         if(tmp > alpha)
+         {
+             tmp_line[ply+1].mv = 0;
+             tmp = -main_search(-beta,-alpha,nextDepth,tmp_line);
+         }    
+      }
+
+-----------------
+release ../1

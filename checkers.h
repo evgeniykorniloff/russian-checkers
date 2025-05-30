@@ -23,7 +23,7 @@ void assert(int expr);
 #define INFINITY 100000
 
 
-typedef unsigned __int64 U64;
+typedef unsigned long long U64;
 typedef U64 BitBoard;
 typedef struct{
   int from[64],to[64];
@@ -72,7 +72,7 @@ extern TBitItem a1h8,a8h1;
 
 
 typedef struct{
-  unsigned int mv,capMask;
+  unsigned long mv,capMask;
 }Move;
 
 #define FROM(mv)       (int)((mv>>6)&63)
@@ -87,7 +87,7 @@ typedef struct{
 
 typedef struct{
   Move hashMv,temp;
-  unsigned int killMv;
+  unsigned long killMv;
   int id,cnt,isSort;
 }PhaseInfo;
 
@@ -108,7 +108,7 @@ extern int to32[64],from32[32];
 ////////
 int GetOne(BitBoard w);
 void InitBitBoard(void);
-unsigned int BitCnt(const BitBoard b);
+unsigned long BitCnt(const BitBoard b);
 void InitGen(void);
 void InsertPiece(int p, int sq, int c);
 void RemovePiece(int p, int sq, int c);

@@ -89,10 +89,10 @@ void InitBitBoard(void)
 
 int GetOne(BitBoard w)
 {
-  unsigned int b;
+  unsigned long b;
   int n;
-  if(w & 0xFFFFFFFF) b = (unsigned int)w, n = 0;
-  else b = (unsigned int)(w>>32), n = 32;
+  if(w & 0xFFFFFFFF) b = (unsigned long)w, n = 0;
+  else b = (unsigned long)(w>>32), n = 32;
   b &= -b;
   if(b & 0xFFFF)
   {

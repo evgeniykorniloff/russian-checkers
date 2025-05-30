@@ -1,0 +1,20 @@
+# last game
+WHITE:
+  PAWNS: A3 C3 E3 G3 B2 D2 F2 H2 A1 C1 E1 G1 
+  KINGS: 
+BLACK:
+  PAWNS: B8 D8 F8 H8 A7 C7 E7 G7 B6 D6 F6 H6 
+  KINGS: 
+SIDE: WHITE
+MOVES-LIST:
+  1. g3f4    f6g5   
+  2. c3b4    d6c5   
+  3. b4d6:c5 e7c5:d6
+  4. b2c3    c7d6   
+  5. f2g3    b6a5   
+  6. c3b4    a5c3:b4
+  7. d2b4:c3 g5h4   
+  8. g1f2    g7f6   
+  9. b4a5    f6g5   
+ 10. f4e5    d6d2:e5:e3
+ 11. c1e3:d2 

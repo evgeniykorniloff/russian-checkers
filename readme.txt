@@ -3,19 +3,16 @@
  *                 *** ABOUT ***               * 
  *                                             *
  * name:           Russian checkers            *
- * author:         Evgeniy Korniloff           *
- * ver:            2.2x                        *
- * date:           2005-2022                   *
+ * author:         Nifont I.                   *
+ * ver:            2.1x                        *
+ * date:           2005-2012                   *
  * system:         Windows, Linux & wine       *
  *                                             *
  ***********************************************
 
-  run:
-    echoboard.exe
 
-  compiler:
-    gcc 32bit mode (64 not tested)
-    gcc *.c -O3 -o rcheckers.exe  
+
+   
 ------------------------------------------------   
 
                  *** FILES ***
@@ -34,7 +31,7 @@ echoboard.exe    -   simple graph. shell,        WINDOWS
                  *** COPYRIGHT(C) ***
                  
    copyright(c):   free ware
-   
+#   royalties:      http://evgeniy-korniloff.narod.ru/money.html
    
 
 
@@ -42,11 +39,10 @@ echoboard.exe    -   simple graph. shell,        WINDOWS
 -------------------------------------------------
 
                 *** CONTACT ***
- 
-   mail:           evgeniy-korniloff@yandex.ru
+                
+   mail:           evgeniy-korniloff@yandex.ru; serg.nifont@yandex.ru
                    
-----------------
-Enjoy!!!                
+                 
 
 
 

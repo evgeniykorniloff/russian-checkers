@@ -12,13 +12,13 @@ int fromTo[64][64];
 Move game_list[MAX_GAME+MAX_PLY+1];
 HashKey key_list[MAX_GAME+MAX_PLY+1];
 int game_max,game_cnt;
-unsigned char history[2*64*64],king_history[2*64*64];
+unsigned char history[2*64*64];
 
 #define R_SHIFT (16+1)
 #define L_SHIFT (16-1)
 int dir[4] = {R_SHIFT,L_SHIFT,-L_SHIFT,-R_SHIFT};
 int startSq,startPiece;
-unsigned int capMask;
+unsigned long capMask;
 Move *list;
 
 
@@ -67,7 +67,7 @@ void InitNewGame(void)
     if(ROW(j)<=2) InsertPiece(PAWN,j,BLACK);
     else if(ROW(j)>=5)InsertPiece(PAWN,j,WHITE);
    }
-   memset(king_history,0,sizeof(king_history));
+
 }
 
 
@@ -448,11 +448,11 @@ void RemovePiece(int p, int sq, int c)
 }
 
 
-unsigned int capKingMask[MAX_GAME+MAX_PLY+1];
+unsigned long capKingMask[MAX_GAME+MAX_PLY+1];
 
 void MakeMove(Move *m)
 {
-   unsigned int w,mv,capKing,b;
+   unsigned long w,mv,capKing,b;
    int p,sq;
 
    w = m->capMask;
@@ -477,7 +477,7 @@ void MakeMove(Move *m)
 
 void UnMakeMove(Move *m)
 {
-   unsigned int w,mv,capKing,b;
+   unsigned long w,mv,capKing,b;
    int p,sq;
 
    w = m->capMask;
@@ -521,7 +521,7 @@ void Swap(int i1, int i2)
 }
 
 
-int IsLegalNotCapMove(unsigned int mv){
+int IsLegalNotCapMove(unsigned long mv){
   int from = FROM(mv), to = TO(mv);
 
   if( mv && pos[from]==PIECE(mv) && color[from]==side &&
@@ -557,7 +557,7 @@ void SortCap(int low, int high){
        Move *m = tree + low;
        int *p = sortVal + low;
        int *stop = sortVal + high;
-       unsigned int temp;
+       unsigned long temp;
        int val;
 
        for(; p <= stop; p++, m++){
@@ -581,7 +581,7 @@ void SortNotCap(int low, int high){
        Move *m = tree + low;
        int *p = sortVal + low;
        int *stop = sortVal + high;
-       unsigned int mv;
+       unsigned long mv;
        int val;
        int promY = side==BLACK?6:1;
 
@@ -589,10 +589,10 @@ void SortNotCap(int low, int high){
 
          mv  = m->mv;
          val = history[(side<<12) | (mv&((63<<6)|63))];
-        // if(PIECE(mv)==PAWN){
-        //    if(NEW_PIECE(mv)==KING) val+=1000;
-        //    else if(ROW(TO(mv))==promY) val+=10;
-        // }
+         if(PIECE(mv)==PAWN){
+            if(NEW_PIECE(mv)==KING) val+=300;
+            else if(ROW(TO(mv))==promY) val+=10;
+         }
          *p = val;
        }
      }
@@ -606,7 +606,7 @@ void SortNotCap(int low, int high){
 
 Move *NextMove(PhaseInfo *p)
 {
-// unsigned int mv;
+// unsigned long mv;
 
   if(ply==0) goto ply0;
 
@@ -700,6 +700,9 @@ ply0:
     case 1:{
       if(p->cnt < treeCnt[ply+1]){
          Pick(p->cnt, treeCnt[ply+1]-1);
+         //??
+        // extern int s_depth;
+        // if(s_depth==1) printf("!%d ",sortVal[p->cnt]);
          return &tree[p->cnt++];
       }
     }

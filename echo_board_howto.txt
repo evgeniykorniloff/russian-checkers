@@ -1,0 +1,71 @@
+  //
+  //  'echoboard' interface,  sample code.
+  //  for more info see the 'options/debug window'
+  //
+
+
+int main()
+{
+
+  char s[1024];
+  int is_echo_board = 0;
+  
+  
+  
+  setbuf( stdout, NULL );
+  setbuf( stdin, NULL );
+
+
+  while ( fgets( s, sizeof( s ) - 1, stdin ) )
+  {
+    char *lex = strtok( s, " \n" );
+
+    if(lex)
+    {
+       if(strcmp(lex,"echoboard")==0)
+       {
+         is_echo_board = 1;               // <------ echoboard code
+
+       }else{
+       
+            if(is_echo_board)
+                 printf("%s\n",  Get_Epd_Position()); // <------ echoboard code
+
+
+            if( do_text_move( lex ) )
+            {
+                if(is_echo_board)
+                   printf("%s\n",  Get_Epd_Position()); // <------ echoboard code
+                 
+                search_move();
+                 
+            }
+
+       
+            // standart 'winboard' engine loop
+           if(strcmp(lex,"quit")==0)
+           {
+             ...        
+           }else if(strcmp(lex,"go")==0){
+           
+             ...
+           }else
+              ... 
+            
+            
+                        
+           if(is_echo_board)
+              printf("%s\n",  Get_Epd_Position()); // <------ echoboard code
+
+            
+       
+       }    
+    }
+
+
+    
+
+
+  }// main loop
+  
+ }// main 
